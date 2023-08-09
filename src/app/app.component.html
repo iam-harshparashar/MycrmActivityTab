@@ -1,0 +1,53 @@
+
+<!-- <button (click)="loadData()">Load Table</button> -->
+<div class="container-fluid w-100">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center p-2">
+      <button class="btn btn-primary" (click)="loadData()">Load Data</button>
+      <form class="form-floating p-0">
+        <input type="text" class="form-control py-1" id="floatingInputValue" [(ngModel)]="searchText" placeholder="Search by subject" (ngModelChange)="applyFilter()">
+        <label for="floatingInputValue">Search</label>
+      </form>
+    </div>
+    <div class="card-body">
+    <!-- <input type="text" [(ngModel)]="searchText" placeholder="Search by subject" (ngModelChange)="applyFilter()" /> -->
+    <table class="table table-bordered" *ngIf="data.length">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Status</th>
+          <th>Created On</th>
+          <th>Owner</th>
+          <th>Activity Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="filteredData.length > 0; else noData">
+          <tr *ngFor="let row of filteredData">
+            <td>
+              <a href="javascript:void(0)" (click)="openActivityForm(row.activityId, row.activitytypecode)">{{ row.subject }}</a>
+            </td>
+            <td>{{ row.status }}</td>
+            <td>{{ row.createdOn }}</td>
+            <td>
+              <a href="javascript:void(0)" (click)="openOwnerDetail(row.ownerId)">{{ row.owner }}</a>
+            </td>
+            <td>{{ row.activitytypecode}}</td>
+          </tr>
+        </ng-container>
+        <ng-template #noData>
+          <tr>
+            <td colspan="4">No data available.</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+    <div class="pagination"  *ngIf="filteredData.length > 0">
+      <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
+      <button (click)="goToNexterPage()" [disabled]="currentPage === totalPages">Next +50</button>
+    </div>
+    </div>
+  </div>
+</div>
